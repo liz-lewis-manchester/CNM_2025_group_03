@@ -1,0 +1,128 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def create_grid(L, dx, dt, total_time):
+    """
+    Generate spatial and temporal grids for the simulation.
+    
+    Parameters:
+        L (float): Length of the river (meters)
+        dx (float): Spatial step size (meters)
+        dt (float): Time step size (seconds)
+        total_time (float): Total simulation time (seconds)
+    
+    Returns:
+        x (np.ndarray): 1D array of spatial coordinates
+        t (np.ndarray): 1D array of time coordinates
+        nx (int): Number of spatial grid points
+        nt (int): Number of time steps
+    """
+    x = np.arange(0, L + dx, dx)
+    t = np.arange(0, total_time + dt, dt)
+    nx = len(x)
+    nt = len(t)
+    return x, t, nx, nt
+
+
+def initial_conditions_default(x):
+    """
+    Set up initial pollutant concentration: 
+    250 μg/m³ at x=0, 0 elsewhere.
+    
+    Parameters:
+        x (np.ndarray): Array of spatial coordinates
+    
+    Returns:
+        theta0 (np.ndarray): Initial concentration array
+    """
+    theta0 = np.zeros_like(x)
+    # Set 250 μg/m³ at x=0
+    theta0[0] = 250.0
+    return theta0
+
+
+def advection_step(theta, U, dx, dt):
+    """
+    Perform a single time step using upwind finite difference for 1D advection.
+    
+    Parameters:
+        theta (np.ndarray): Pollutant concentration at current time
+        U (float): Flow velocity (m/s), positive along increasing x
+        dx (float): Spatial step size (meters)
+        dt (float): Time step size (seconds)
+    
+    Returns:
+        theta_new (np.ndarray): Updated concentration array
+    """
+    nx = len(theta)
+    theta_new = np.zeros_like(theta)
+    # Upwind scheme: boundary at x=0 held constant
+    theta_new[0] = theta[0]  # Dirichlet BC (can be adapted later)
+    for i in range(1, nx):
+        theta_new[i] = theta[i] - U * dt / dx * (theta[i] - theta[i-1])
+    return theta_new
+
+
+def run_simulation(L, dx, dt, total_time, U, initial_condition_func):
+    """
+    Run river advection simulation and return full concentration field.
+    
+    Parameters:
+        L (float): Length of the river (meters)
+        dx (float): Spatial step size (meters)
+        dt (float): Time step size (seconds)
+        total_time (float): Total simulation time (seconds)
+        U (float): Flow velocity (m/s)
+        initial_condition_func (callable): Function to set initial condition
+        
+    Returns:
+        x (np.ndarray): Array of spatial coordinates
+        t (np.ndarray): Array of time points
+        theta_field (np.ndarray): 2D concentration (nt × nx)
+    """
+    x, t, nx, nt = create_grid(L, dx, dt, total_time)
+    theta_field = np.zeros((nt, nx))
+    # Set initial condition
+    theta_field[0, :] = initial_condition_func(x)
+    # Time stepping
+    for n in range(1, nt):
+        theta_field[n, :] = advection_step(theta_field[n-1, :], U, dx, dt)
+    return x, t, theta_field
+
+
+def plot_results(x, theta_field, t, case_label=""):
+    """
+    Plot the pollutant concentration at the final time step.
+    
+    Parameters:
+        x (np.ndarray): Array of spatial coordinates
+        theta_field (np.ndarray): 2D concentration (nt × nx)
+        t (np.ndarray): Array of time points
+        case_label (str): Label for the plot title
+    """
+    plt.figure(figsize=(8, 5))
+    plt.plot(x, theta_field[-1, :], marker='o')
+    plt.xlabel("Distance along river (m)")
+    plt.ylabel("Concentration (μg/m³)")
+    plt.title(f"Pollutant transport at t={t[-1]:.0f} s {case_label}")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
+if __name__ == "__main__":
+    # Test Case 1 parameters
+    L = 20.0      # meters
+    dx = 0.2      # meters
+    dt = 10.0     # seconds
+    total_time = 300.0  # seconds
+    U = 0.1       # m/s
+
+    # Run simulation
+    x, t, theta_field = run_simulation(
+        L=L, dx=dx, dt=dt, total_time=total_time, U=U,
+        initial_condition_func=initial_conditions_default
+    )
+
+    # Plot results
+    plot_results(x, theta_field, t, case_label="(Test Case 1)")
