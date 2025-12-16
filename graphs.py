@@ -1,6 +1,24 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
+# Load the data into a pandas DataFrame
+data = pd.read_csv('initial_conditions.txt', delim_whitespace=True)
+
+# Access `distance` and `concentration` directly
+distance = data['distance']
+concentration = data['concentration']
+
+# Verify the data
+print("Distance:\n", distance)
+print("Concentration:\n", concentration)
+
+# Use directly in your code
+spatial_grid = distance
+time_step = 1  # Default time step of 1 second
+
+# Visualize using your `plot_snapshots` function
+plot_snapshots(data=[concentration], spatial_grid=spatial_grid, time_step=time_step)
 # Function to visualize pollutant concentration at several time intervals
 # Parameters:
 #   data: 2D array(time, space)
@@ -23,7 +41,7 @@ def plot_snapshots(data, spatial_grid, time_step, snapshots=8, graph_title='Poll
     plt.legend()
     plt.tight_layout()
     plt.show()
-
+    
 # Function to compare multiple simulation results in one plot
 # Parameters:
 #   simulations: dictionary of {'label': 2D data array}
