@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # model parameters
+# courant small enough for model to behave
 L = 20.0      # length of river (m)
 dx = 0.2      # spatial step (m)
 T = 300.0     # total time (s)
