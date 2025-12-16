@@ -4,11 +4,12 @@ lastRow = len(Distance)-1
 # gets river length from file
 riverLength = (Distance[lastRow]) # e.g. len(Distance)=21, Distance[20]=20m
 
-numberOfInterpolations = float(input("Input the number of interpolations required here. e.g. input 5 for a spatial resolution of 0.2: "))
-
 # assume that the initial resolution is the same for the whole file
 # everything in metres
 initialResolution = Distance[1] - Distance[0]
+
+numberOfInterpolations = float(input("Input the number of interpolations required here. e.g. input 5 for a spatial resolution of 0.2: "))
+spatialResolution = initialResolution/numberOfInterpolations
 
 # e.g. inital length 21 becomes 101 when adding 4 interpolation points
 interpLength = int((len(Concentration) - 1) * numberOfInterpolations + 1)
