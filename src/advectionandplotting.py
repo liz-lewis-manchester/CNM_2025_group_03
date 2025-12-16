@@ -1,17 +1,18 @@
-totalT=float(input("Input total time period here (in seconds): "))
+totalT=float(input("Input total time period here (in seconds) e.g. 300 : "))
 
-temporalRes=float(input("Input temporal resolution here (in seconds): "))
+temporalRes=float(input("Input temporal resolution here (in seconds) e.g. 20 : "))
 
-u=float(input("Input river velocity (in m/s): "))
+u=float(input("Input river velocity (in m/s) e.g. 0.1 : "))
 
 dx = spatialResolution
 
 CFLmax = 1
 dt = CFLmax * dx / u
 
-plotInterval = math.ceil(int(temporalRes / dt)) # rounds up to prevent plot interval being 0
+# ensures Nt isn't 0
+Nt = max(int(math.ceil(totalT / dt)), 1)
 
-Nt = int(totalT / dt)
+plotInterval = max(int(math.ceil(temporalRes / dt)), 1)
 
 Nx = interpLength
 
@@ -29,10 +30,18 @@ for j in range( 1, Nt + 1 ):
     # boundary conditions
     y[0] = yOld[0] # continuous inflow of pollutant
     y[-1] = y[-2] # downstream boundary: 0 spatial gradient to allow outflow
+    raise ValueError('The current end boundary condition causes the graph to go flat at the end.')
     
     if j % plotInterval == 0:
         plt.plot(x, y)
 
+# graph of concentration against distance with different times plotted in different colours
 plt.xlabel("Distance")
 plt.ylabel("Concentration")
+plt.show()
+
+# graph of concentration against distance, only showing values for initial and final times
+plt.plot(x, newC, label="Initial")
+plt.plot(x, y, label="Final")
+plt.legend()
 plt.show()

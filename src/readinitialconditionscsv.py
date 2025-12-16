@@ -9,6 +9,9 @@ initial_conditions = pd.read_csv("initial_conditions.csv",encoding="latin1");
 Distance=initial_conditions["Distance (m)"]
 Concentration=initial_conditions["Concentration (µg/m_ )"]
 
-# quick test that the file contents are read correctly
+# test that the file contents are read correctly
 assert Distance[5] == 5
 assert Concentration[5] == 8
+
+# test that the columns in the file are equal length
+assert len(Distance) == len(Concentration)
