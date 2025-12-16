@@ -29,6 +29,7 @@ for j in range( 1, Nt + 1 ):
     # boundary conditions
     y[0] = yOld[0] # continuous inflow of pollutant
     y[-1] = y[-2] # downstream boundary: 0 spatial gradient to allow outflow
+    raise ValueError('The current end boundary condition causes the graph to go flat at the end.')
     
     if j % plotInterval == 0:
         plt.plot(x, y)
