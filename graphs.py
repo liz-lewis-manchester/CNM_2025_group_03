@@ -3,23 +3,20 @@ import numpy as np
 import pandas as pd
 
 # Load the data into a pandas DataFrame
-data = pd.read_csv('initial_conditions.txt', delim_whitespace=True)  # Adjust for correct file format
+data = pd.read_csv('initial_conditions.txt') 
 
 # Access `distance` and `concentration` directly
-distance = data['distance']
-concentration = data['concentration']
+distance = data['distance (m)']
+concentration = data['concentration (μg/m_)']
 
 # Verify the data
 print("Distance:\n", distance)
 print("Concentration:\n", concentration)
 
-# Use directly in your code
-spatial_grid = distance
-time_step = 1  # Default time step of 1 second
+time_snapshots = 10
+concentration_data = np.tile(concentration.values, (time_snapshots, 1
 
-# Visualize using your `plot_snapshots` function
-plot_snapshots(data=[concentration], spatial_grid=spatial_grid, time_step=time_step)
-
+time_step = 1
 
 # Function to visualize pollutant concentration at several time intervals
 # Parameters:
@@ -62,6 +59,17 @@ def compare_simulations(simulations, distance_grid, dt):
     plt.legend()
     plt.tight_layout()
     plt.show()
+    # Simulating two different "simulation results"
+simulation_1 = np.tile(concentration.values, (10, 1)) * 1.2  # Example scale factor for simulation 1
+simulation_2 = np.tile(concentration.values, (10, 1)) * 0.8  # Example scale factor for simulation 2
+
+simulations = {
+    "Simulation 1": simulation_1,
+    "Simulation 2": simulation_2,
+}
+
+# Using the compare_simulations function
+compare_simulations(simulations=simulations, distance_grid=distance, dt=1)
 
 # Function to create a heatmap of concentration over time
 # Parameters:
@@ -79,3 +87,10 @@ def plot_concentration_heatmap(data, distance_range, timestep, heatmap_title='Co
     plt.title(heatmap_title)
     plt.tight_layout()
     plt.show()
+
+
+# 1. Snapshot visualization for simulated time snapshots
+plot_snapshots(data=concentration_data, spatial_grid=distance, time_step=time_step)
+
+# 2. Heatmap visualization for simulated concentration over time
+plot_concentration_heatmap(data=concentration_data, distance_range=distance, timestep=time_step)
