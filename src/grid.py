@@ -1,40 +1,17 @@
+from __future__ import annotations
+
 import numpy as np
-import pytest
 
-# conftest.py makes /src importable
-from grid import make_grid
+def make_grid(L: float, dx: float, T: float, dt: float) -> tuple[np.ndarray, np.darray]:
 
-def test_grid_endpoints_and_spacing():
-  L, dx = 20.0, 0.2
-  T, dt = 300.0, 10.0
+if L <= 0 or dx <= 0 or T <= 0 or dt <= 0:
+  raise ValueError("L, dx, T, dt must all be positive")
+  
+# Rounding L/dx to an integer
+Nx = int(round(L / dx))
+Nt = int(round(T / dt))
 
-x, t = make_grid(L, dx, T, dt)
+x = np.linspace(0.0, L, Nx + 1)
+t = np.linspace(0.0, T, Nt + 1)
 
-# Endpoints
-assert np.isclose(x[0], 0.0)
-assert np.isclose(x[-1, L)
-assert np.isclose(t[0]. 0.0)
-assert np.isclose(t[-1], T)
-
-# Uniform spacing
-assert np.allclose(np.diff(x), dx)
-assert np.allclose(np.diff(t), dt)
-
-def test_grid_length_match_expected_counts():
-  L, dx = 20.0, 0.2
-  T, dt = 300.0, 10.0
-
-  x, t = make_grid(L, dx, T, dt)
-
-  expected_nx = int(round(L / dx)) + 1
-  expected_nt = int(round(T / dt)) + 1
-
-assert len(x) == expected_nx
-assert len(t) == expected_nt
-
-def test_grid_rejects_non_positive_inputs():
-  with pytest.raises(ValueError):
-    make_grid(0.0, 0.2, 300.0, 10.0)
-
-  with pytest.raises(ValueError):
-    make_grid(20.0, -0.2, 300.0, 10.0)
+return x, t
