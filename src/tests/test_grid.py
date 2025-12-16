@@ -13,7 +13,7 @@ x, t = make_grid(L, dx, T, dt)
 # Endpoints
 assert np.isclose(x[0], 0.0)
 assert np.isclose(x[-1], L)
-assert np.isclose(t[0]. 0.0)
+assert np.isclose(t[0], 0.0)
 assert np.isclose(t[-1], T)
 
 # Uniform spacing
