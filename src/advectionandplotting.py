@@ -1,20 +1,18 @@
-totalT=float(input("Input total time period here (in seconds): "))
+totalT=float(input("Input total time period here (in seconds) e.g. 300 : "))
 
-temporalRes=float(input("Input temporal resolution here (in seconds): "))
+temporalRes=float(input("Input temporal resolution here (in seconds) e.g. 20 : "))
 
-u=float(input("Input river velocity (in m/s): "))
+u=float(input("Input river velocity (in m/s) e.g. 0.1 : "))
 
 dx = spatialResolution
 
 CFLmax = 1
 dt = CFLmax * dx / u
 
-plotInterval = int(math.ceil(temporalRes / dt)) # rounds up to prevent plot interval being 0
+# ensures Nt isn't 0
+Nt = max(int(math.ceil(totalT / dt)), 1)
 
-Nt = int(totalT / dt)
-
-# check Nt isn't 0
-assert Nt != 0
+plotInterval = max(int(math.ceil(temporalRes / dt)), 1)
 
 Nx = interpLength
 
@@ -37,10 +35,12 @@ for j in range( 1, Nt + 1 ):
     if j % plotInterval == 0:
         plt.plot(x, y)
 
+# graph of concentration against distance with different times plotted in different colours
 plt.xlabel("Distance")
 plt.ylabel("Concentration")
 plt.show()
 
+# graph of concentration against distance, only showing values for initial and final times
 plt.plot(x, newC, label="Initial")
 plt.plot(x, y, label="Final")
 plt.legend()
