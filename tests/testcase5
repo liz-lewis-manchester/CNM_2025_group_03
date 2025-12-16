@@ -1,1 +1,89 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# model parameters
+L = 20.0      # length of river (m)
+dx = 0.2      # spatial step (m)
+T = 300.0     # total time (s)
+dt = 1.0      # time step (s)
+U0 = 0.1      # mean velocity (m/s)
+
+
+# grid
+x = np.arange(0, L + dx, dx)
+t = np.arange(0, T + dt, dt)
+
+
+# initial conditions (given data)
+x_data = np.arange(0, 21, 1)
+c_data = np.array([
+    300, 10, 10, 10, 10, 8, 8, 8, 8, 7,
+    7, 7, 35, 57, 80, 85, 80, 50, 40, 20, 10
+])
+
+# interpolate onto grid
+theta = np.interp(x, x_data, c_data)
+
+
+# variable velocity (±10%)
+
+rng = np.random.default_rng(42)
+U = U0 * (1 + rng.uniform(-0.1, 0.1, len(x)))
+
+# make sure velocity stays positive
+U[U <= 0] = 1e-6
+
+# check stability (CFL condition)
+courant = np.max(U) * dt / dx
+print("Max Courant number:", courant)
+
+# time stepping (upwind scheme)
+theta_hist = np.zeros((len(t), len(x)))
+theta_hist[0] = theta.copy()
+
+# keep upstream concentration fixed
+theta_in = theta[0]
+
+for n in range(1, len(t)):
+    theta_new = theta.copy()
+    theta_new[0] = theta_in
+
+    for i in range(1, len(x)):
+        theta_new[i] = theta[i] - (U[i] * dt / dx) * (theta[i] - theta[i-1])
+
+    theta = theta_new
+    theta_hist[n] = theta
+
+
+# plot concentration profiles
+plt.figure(figsize=(8,5))
+
+times_to_plot = [0, 60, 120, 180, 240, 300]
+
+for time in times_to_plot:
+    idx = int(time / dt)
+    plt.plot(x, theta_hist[idx], label="t = " + str(time) + " s")
+
+plt.xlabel("Distance (m)")
+plt.ylabel("Concentration (ug/m3)")
+plt.title("Pollutant concentration with variable velocity")
+plt.legend()
+plt.grid()
+plt.show()
+
+# plot velocity profile
+
+plt.figure(figsize=(8,4))
+plt.plot(x, U)
+plt.xlabel("Distance (m)")
+plt.ylabel("Velocity (m/s)")
+plt.title("Velocity profile with random perturbation")
+plt.grid()
+plt.show()
+
+
+# check for negative values
+print("Minimum concentration:", theta_hist.min())
+
+
 
