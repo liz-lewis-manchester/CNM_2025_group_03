@@ -19,3 +19,7 @@ where:
 
 ### Code Functionality
 The code allows the user to define the model domain, spatial and temporal resolution, and flow velocity. It constructs the computational grid and solves the one-dimensional advection equation to simulate pollutant transport over time. Initial conditions can be specified directly or read from initial_conditions.csv, with the input data interpolated onto the model grid if required. Boundary conditions are applied at the edges of the domain, and the model produces plots to visualise how pollutant concentration evolves in space and time.
+
+### Repository Structure
+### Branch Structure
+### How to run code
