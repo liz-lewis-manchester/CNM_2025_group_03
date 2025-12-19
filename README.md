@@ -91,11 +91,6 @@ This Python code creates a visualisation of the pollutant concentration data ove
 
 ---
 
-### Features
-- **Time Snapshots**: Visualize how pollutant concentration evolves over time at intervals.
-- **Simulation Comparison**: Compare final concentration profiles from multiple simulations.
-- **Heatmap Visualization**: Display concentration as a heatmap over time and space.
-
 ### Authors
 Chloe Godfrey
 
