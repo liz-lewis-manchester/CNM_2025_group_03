@@ -29,14 +29,14 @@ results/    – generated plots and figures
 ### How to run code
 The model is organised so that each of the required test cases is implemented as a separate Python script in the tests/ directory. This allows each scenario described in the coursework brief to be run independently.
 
-##### Requirements
+#### Requirements
 The code requires Python 3 and the following Python packages:
 - numpy
 - matplotlib
 - pandas (for CSV input and interpolation)
 
 
-##### Running the Code in Google Colab
+#### Running the Code in Google Colab
 
 Open Google Colab and upload the repository (either as a ZIP file or via Google Drive).
 
