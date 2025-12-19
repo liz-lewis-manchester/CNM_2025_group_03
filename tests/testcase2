@@ -62,6 +62,8 @@ dx = spatialResolution
 CFLmax = 1
 dt = CFLmax * dx / u
 
+c = u * dt / dx  # Courant number
+
 # ensures Nt isn't 0
 Nt = max(int(math.ceil(totalT / dt)), 1)
 
@@ -83,7 +85,7 @@ for j in range(1, Nt):
 
     # boundary conditions
     y[0] = yOld[0]   # continuous inflow of pollutant
-    y[-1] = y[-2]   # downstream boundary: 0 spatial gradient to allow outflow
+    y[-1] = yOld[-1] - c * (yOld[-1] - yOld[-2])   # downstream boundary: allows pollutant to exit the domain with the flow velocity
 
     if j % plotInterval == 0:
         plt.plot(x, y)
