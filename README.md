@@ -41,7 +41,6 @@ Follow these steps to run the full project (including the test cases) in Colab:
 
 1) Open Colab and bring in the repo  
    - Upload the project ZIP to Colab and unzip it, **or** mount Google Drive and copy the repo folder into `/content`.  
-   - Replace `your-repository-name` below with the actual folder name.
 
 2) Change into the repo  
    ```bash
