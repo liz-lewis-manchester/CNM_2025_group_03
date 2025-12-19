@@ -35,27 +35,47 @@ The code requires Python 3 and the following Python packages:
 - matplotlib
 - pandas (for CSV input and interpolation)
 
+## Running the repository in Google Colab
 
-#### Running the Code in Google Colab
+Follow these steps to run the full project (including the test cases) in Colab:
 
-Open Google Colab and upload the repository (either as a ZIP file or via Google Drive).
+1) Open Colab and bring in the repo  
+   - Upload the project ZIP to Colab and unzip it, **or** mount Google Drive and copy the repo folder into `/content`.  
+   - Replace `your-repository-name` below with the actual folder name.
 
-Change directory into the repository:
+2) Change into the repo  
+   ```bash
+   %cd /content/your-repository-name
+   ```
 
-%cd /content/your-repository-name
+3) Install dependencies  
+   ```bash
+   !pip install numpy matplotlib pandas
+   ```
+   If the project has a `requirements.txt`, install everything with:
+   ```bash
+   !pip install -r requirements.txt
+   ```
 
+4) Ensure required data is present  
+   - Make sure `data/initial_conditions.csv` exists (needed for Test Case 2).  
+   - If it’s missing, upload it into the `data` directory (create the folder if needed).
 
-Install required packages:
+5) Run tests  
+   - Full test suite (if available):  
+     ```bash
+     !pytest
+     ```
+   - Individual test cases:  
+     ```bash
+     !python tests/test_case_1.py
+     !python tests/test_case_2.py  # requires data/initial_conditions.csv
+     ```
 
-!pip install numpy matplotlib pandas
+6) Review outputs  
+   - Check the Colab cell outputs for logs or printed results.  
+   - Inspect any generated files (e.g., figures) in the repository folders such as `outputs/` or similar.
 
-
-Run a test case using:
-
-!python tests/test_case_1.py
-
-
-Ensure that data/initial_conditions.csv is present if running Test Case 2.
 
 #### Description of Test Case Files
 
